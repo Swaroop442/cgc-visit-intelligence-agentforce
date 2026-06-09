@@ -33,11 +33,7 @@ public with sharing class SearchVisitsForAgent {
                 ParsedQuery parsed = parseSearchQuery(query);
 
                 // Build SELECT fields
-<<<<<<< HEAD
                 String selectFields = 'SELECT Id, Name, Status, Account.Name, Account.Id, Owner.Name, PlaceId';
-=======
-                String selectFields = 'SELECT Id, Name, Status, Account.Name, Account.Id, Owner.Name';
->>>>>>> 6d525c08995abb5c611ddd26bb4db7abbe8030d1
                 if (hasResponsible) {
                     selectFields += ', cgcloud__Responsible__c, cgcloud__Responsible__r.Name';
                 }
@@ -48,17 +44,11 @@ public with sharing class SearchVisitsForAgent {
                 // Build WHERE clause
                 List<String> conditions = new List<String>();
 
-<<<<<<< HEAD
                 // Text filter (account name, visit name, status, or related place name)
-=======
-                // Text filter (account name, visit name, or status)
->>>>>>> 6d525c08995abb5c611ddd26bb4db7abbe8030d1
                 String textPattern;
                 if (String.isNotBlank(parsed.textPart)) {
                     String cleanedText = parsed.textPart.trim().replaceAll('\\s+', '%');
                     textPattern = '%' + cleanedText + '%';
-<<<<<<< HEAD
-                    
                     Set<Id> placeIds = new Set<Id>();
                     
                     try {
@@ -90,9 +80,6 @@ public with sharing class SearchVisitsForAgent {
                     } else {
                         conditions.add('(Account.Name LIKE :textPattern OR Name LIKE :textPattern OR Status LIKE :textPattern)');
                     }
-=======
-                    conditions.add('(Account.Name LIKE :textPattern OR Name LIKE :textPattern OR Status LIKE :textPattern)');
->>>>>>> 6d525c08995abb5c611ddd26bb4db7abbe8030d1
                 }
 
                 // Date filter using cgcloud__Start_Date__c
@@ -123,7 +110,6 @@ public with sharing class SearchVisitsForAgent {
                 String searchQueryStr = selectFields + whereClause + ' WITH USER_MODE ORDER BY cgcloud__Start_Date__c DESC LIMIT 15';
                 List<SObject> visits = Database.query(searchQueryStr);
 
-<<<<<<< HEAD
                 // Collect Place IDs to query their names/descriptions
                 Set<Id> placeIdsToQuery = new Set<Id>();
                 for (SObject v : visits) {
@@ -183,9 +169,6 @@ public with sharing class SearchVisitsForAgent {
                         } catch (Exception e) {}
                     }
                 }
-
-=======
->>>>>>> 6d525c08995abb5c611ddd26bb4db7abbe8030d1
                 for (SObject v : visits) {
                     String visitId = (String) v.get('Id');
                     String visitName = (String) v.get('Name');
@@ -206,7 +189,6 @@ public with sharing class SearchVisitsForAgent {
                     Date startDate = (Date) v.get('cgcloud__Start_Date__c');
                     String dateStr = formatDate(startDate);
 
-<<<<<<< HEAD
                     Id placeId = null;
                     try {
                         placeId = (Id) v.get('PlaceId');
@@ -219,9 +201,6 @@ public with sharing class SearchVisitsForAgent {
                     }
 
                     String label = visitName + '  \u2014  ' + displayAccount +
-=======
-                    String label = visitName + '  \u2014  ' + accountName +
->>>>>>> 6d525c08995abb5c611ddd26bb4db7abbe8030d1
                         '\n     • \uD83D\uDCC5 Date: ' + dateStr +
                         '\n     • \uD83D\uDCCB Status: ' + status +
                         '\n     • \uD83D\uDC64 Assigned: ' + assignedUser;
